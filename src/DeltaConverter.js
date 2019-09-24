@@ -1,5 +1,4 @@
 var equal = require("fast-deep-equal");
-//const cheerio = require("cheerio");
 
 var escapeHtml = function(unsafe) {
   if (unsafe) {
@@ -20,7 +19,6 @@ var attrsToString = function(attrs) {
   if (attrs) {
     for (var item in attrs) {
       attr_string += " " + item + "='" + attrs[item] + "'";
-      //if (item == "style") console.log(attrs);
     }
   }
   return attr_string;
@@ -30,10 +28,9 @@ var convert = function(value, attributes) {
   let qclass = "";
   if (attributes) {
     if (attributes["align"]) {
-      if (attributes["align"] == "center") qclass = "ql-align-center";
-      if (attributes["align"] == "left") qclass = "ql-align-left";
-      if (attributes["align"] == "right") qclass = "ql-align-right";
-      //console.log(qclass);
+      if (attributes["align"] == "center") qclass += "ql-align-center ";
+      if (attributes["align"] == "left") qclass += "ql-align-left ";
+      if (attributes["align"] == "right") qclass += "ql-align-right ";
     }
     if (attributes["code-block"]) {
       return wrapTag("pre", wrapTag("code", value.join("\n").trim()), {
@@ -59,15 +56,13 @@ var convert = function(value, attributes) {
       //console.log(value, attributes);
     }
   }
-  // ignores p class if iframe
-  //   if (!value.includes("iframe")) return wrapTag("p", value, { class: qclass });
-  //   else return wrapTag("p", value);
 
   return wrapTag("p", value, { class: qclass });
 };
 
 var convertInline = function(insert, attributes) {
   let qstyle = "";
+  let qclass = "";
   if (attributes) {
     // if (attributes["color"]) {
     //   qstyle += `color:${attributes["color"]};`;
@@ -75,17 +70,30 @@ var convertInline = function(insert, attributes) {
     // if (attributes["background"]) {
     //   qstyle += `background:${attributes["background"]};`;
     // }
-    if (attributes["bold"]) {
-      return wrapTag("b", insert /*, { style: qstyle }*/);
-    } else if (attributes["link"]) {
-      return wrapTag("a", insert, {
-        href: attributes.link
-      });
-    } else if (attributes["code"]) {
-      return wrapTag("code", insert);
-    } else if (attributes["italic"]) {
-      return wrapTag("i", insert);
+
+    if (attributes["font"]) {
+      if (attributes["font"] == "serif") qclass += "ql-font-serif ";
+      if (attributes["font"] == "monospace") qclass += "ql-font-monospace ";
     }
+
+    html = insert;
+    for (var key in attributes) {
+      if (key == "italic") {
+        html = wrapTag("em", html, { class: qclass /*, style:qstyle */ });
+      } else if (key == "underline") {
+        html = wrapTag("u", html, { class: qclass });
+      } else if (attributes["bold"]) {
+        html = wrapTag("b", html, { class: qclass });
+      } else if (attributes["link"]) {
+        html = wrapTag("a", html, {
+          href: attributes.link,
+          class: qclass
+        });
+      } else if (attributes["code"]) {
+        html = wrapTag("code", html, { class: qclass });
+      }
+    }
+    return html;
   }
 
   return insert;
@@ -114,9 +122,6 @@ DeltaConverter.prototype.addItem = function(insert, attributes) {
         this.current.attributes = attributes;
       }
     }
-    // if (attributes) {
-    //   console.log(`attributes  ${JSON.stringify(attributes)}`);
-    // }
 
     this.current.value += convertInline(escapeHtml(insert), attributes);
   } else if (typeof insert == "object") {
@@ -127,12 +132,12 @@ DeltaConverter.prototype.addItem = function(insert, attributes) {
         height: attributes && attributes.height ? attributes.height : "auto"
       });
     } else if (insert.video) {
-      //   this.current.value += convertInline(insert, attributes);
       this.current.value += wrapTag("iframe", "", {
         src: insert.video,
         width: attributes && attributes.width ? attributes.width : "auto",
         height: attributes && attributes.height ? attributes.height : "auto",
-        class: "ql-align-center"
+        class:
+          attributes && attributes.align ? `ql-align-${attributes.align}` : ""
       });
     }
   }
@@ -211,21 +216,8 @@ DeltaConverter.prototype.toHtml = function() {
   }
   // replace empty paragraphs with '&nbsp;'
   this.results = replaceAll(this.results, "></p>", ">&nbsp;</p>");
-  ////
-  /// VIDEO ALIGN FIX
-  //const $ = cheerio.load(this.results);
-  //   $("iframe[class='ql-align-center']")
-  //     .parent()
-  //     .addClass("ql-align-center");
-  //   $("iframe[class='ql-align-left']")
-  //     .parent()
-  //     .addClass("ql-align-left");
-  //   $("iframe[class='ql-align-right']")
-  //     .parent()
-  //     .addClass("ql-align-right");
-  ///
 
-  return this.results//$.html(); //this.results;
+  return this.results;
 };
 
 module.exports = DeltaConverter;

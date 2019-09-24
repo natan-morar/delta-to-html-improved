@@ -1,6 +1,6 @@
 {
   "name": "delta-to-html-improved",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Delta to Html converter",
   "main": "src/delta-to-html.js",
   "scripts": {
@@ -14,7 +14,11 @@
   },
   "keywords": [
     "quill",
-    "delta"
+    "delta",
+    "convert",
+    "html",
+    "to",
+    "delta to html"
   ],
   "author": "Joo",
   "license": "MIT",
@@ -22,11 +26,6 @@
     "url": "https://github.com/natan-morar/delta-to-html-improved/issues"
   },
   "homepage": "https://github.com/natan-morar/delta-to-html-improved#readme",
-  "devDependencies": {
-    "coveralls": "^3.0.0",
-    "istanbul": "^0.4.5",
-    "jasmine": "^2.8.0"
-  },
   "dependencies": {
     "fast-deep-equal": "^2.0.1"
   }

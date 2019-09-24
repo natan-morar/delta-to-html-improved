@@ -1,5 +1,5 @@
-var equal = require("deep-equal");
-const cheerio = require("cheerio");
+var equal = require("fast-deep-equal");
+//const cheerio = require("cheerio");
 
 var escapeHtml = function(unsafe) {
   if (unsafe) {
@@ -213,7 +213,7 @@ DeltaConverter.prototype.toHtml = function() {
   this.results = replaceAll(this.results, "></p>", ">&nbsp;</p>");
   ////
   /// VIDEO ALIGN FIX
-  const $ = cheerio.load(this.results);
+  //const $ = cheerio.load(this.results);
   //   $("iframe[class='ql-align-center']")
   //     .parent()
   //     .addClass("ql-align-center");
@@ -225,7 +225,7 @@ DeltaConverter.prototype.toHtml = function() {
   //     .addClass("ql-align-right");
   ///
 
-  return $.html(); //this.results;
+  return this.results//$.html(); //this.results;
 };
 
 module.exports = DeltaConverter;

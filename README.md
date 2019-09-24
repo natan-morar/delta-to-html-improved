@@ -33,6 +33,7 @@ let html = deltaToHtml(delta)
 - aling
 - strike
 - script
+- indent
 - different video sizes
 - lines that have multiple formats (lines that are italic, bold, underlined, ... etc. at the same time)
 

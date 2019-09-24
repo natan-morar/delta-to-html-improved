@@ -32,6 +32,9 @@ var convert = function(value, attributes) {
       if (attributes["align"] == "left") qclass += "ql-align-left ";
       if (attributes["align"] == "right") qclass += "ql-align-right ";
     }
+    if (attributes["indent"]) {
+      qclass += `ql-indent-${attributes["indent"]} `;
+    }
     if (attributes["code-block"]) {
       return wrapTag("pre", wrapTag("code", value.join("\n").trim()), {
         class: qclass
@@ -250,7 +253,7 @@ DeltaConverter.prototype.toHtml = function() {
     return str.replace(new RegExp(escapeRegExp(find), "g"), replace);
   }
   // replace empty paragraphs with '&nbsp;'
-  this.results = replaceAll(this.results, "></p>", ">&nbsp;</p>");
+  this.results = replaceAll(this.results, "></p>", "><br/></p>");
 
   return this.results;
 };

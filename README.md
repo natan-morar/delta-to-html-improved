@@ -30,7 +30,7 @@ let html = deltaToHtml(delta)
 ### Added support for:
 
 - fonts
-- aling
+- align
 - strike
 - script
 - indent
@@ -42,6 +42,7 @@ let html = deltaToHtml(delta)
 - Empty paragraphs (lines containing only `\n`) are now converted to `<p>&nbsp;</p>`
 - `deep-equal` dependency changed to `fast-deep-equal`
 - grouped `blockquote`s together
+- link set to open in new tab
 - Fixed issues which caused crashes
 
 ### NOT supported yet:

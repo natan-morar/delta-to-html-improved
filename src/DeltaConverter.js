@@ -102,6 +102,7 @@ var convertInline = function(insert, attributes) {
       } else if (attributes["link"] && once.link == false) {
         html = wrapTag("a", html, {
           href: attributes.link,
+          target: "_blank",
           class: qclass
         });
         once.link = true;

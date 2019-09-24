@@ -36,4 +36,12 @@ let html = deltaToHtml(delta)
 ### Changes:
 
 - Empty paragraphs (lines containing only _\n_) are now converted to `<p>&nbsp;</p>`
-- _deep-equal_ dependency changed to _fast-deep-equal_
+- ```
+  deep-equal
+  ```
+
+dependency changed to
+
+```
+fast-deep-equal
+```

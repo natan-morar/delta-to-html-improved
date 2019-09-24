@@ -31,6 +31,8 @@ let html = deltaToHtml(delta)
 
 - fonts
 - aling
+- strike
+- script
 - different video sizes
 - lines that have multiple formats (lines that are italic, bold, underlined, ... etc. at the same time)
 
@@ -38,4 +40,10 @@ let html = deltaToHtml(delta)
 
 - Empty paragraphs (lines containing only `\n`) are now converted to `<p>&nbsp;</p>`
 - `deep-equal` dependency changed to `fast-deep-equal`
+- grouped `blockquote`s together
 - Fixed issues which caused crashes
+
+### NOT supported yet:
+
+- text `color`
+- text `backgroud`

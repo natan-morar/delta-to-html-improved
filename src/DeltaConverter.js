@@ -41,7 +41,7 @@ var convert = function(value, attributes) {
         class: qclass
       });
     } else if (attributes["blockquote"]) {
-      return wrapTag("blockquote", value, { class: qclass });
+      return wrapTag("blockquote", value.join("\n").trim(), { class: qclass });
     } else if (attributes["list"]) {
       return wrapTag(
         attributes["list"] == "ordered" ? "ol" : "ul",
@@ -77,20 +77,47 @@ var convertInline = function(insert, attributes) {
     }
 
     html = insert;
+    let once = {
+      italic: false,
+      underline: false,
+      bold: false,
+      link: false,
+      code: false,
+      strike: false,
+      script: false
+    };
     for (var key in attributes) {
-      if (key == "italic") {
+      if (key == "italic" && once.italic == false) {
         html = wrapTag("em", html, { class: qclass /*, style:qstyle */ });
-      } else if (key == "underline") {
+        once.italic = true;
+      } else if (key == "underline" && once.underline == false) {
         html = wrapTag("u", html, { class: qclass });
-      } else if (attributes["bold"]) {
+        once.underline = true;
+      } else if (attributes["bold"] && once.bold == false) {
         html = wrapTag("b", html, { class: qclass });
-      } else if (attributes["link"]) {
+        once.bold = true;
+      } else if (attributes["link"] && once.link == false) {
         html = wrapTag("a", html, {
           href: attributes.link,
           class: qclass
         });
-      } else if (attributes["code"]) {
+        once.link = true;
+      } else if (attributes["code"] && once.code == false) {
         html = wrapTag("code", html, { class: qclass });
+        once.code = true;
+      } else if (attributes["strike"] && once.strike == false) {
+        once.strike = true;
+        html = wrapTag("s", html, { class: qclass });
+      } else if (attributes["script"] && once.script == false) {
+        if (attributes["script"] == "super")
+          html = wrapTag("sup", html, {
+            class: qclass
+          });
+        if (attributes["script"] == "sub")
+          html = wrapTag("sub", html, {
+            class: qclass
+          });
+        once.script = true;
       }
     }
     return html;
@@ -114,7 +141,9 @@ DeltaConverter.prototype.addItem = function(insert, attributes) {
       if (
         equal(this.current.attributes, attributes) &&
         attributes &&
-        (attributes["code-block"] || attributes["list"]) &&
+        (attributes["code-block"] ||
+          attributes["list"] ||
+          attributes["blockquote"]) &&
         insert == "\n"
       ) {
       } else {
@@ -129,7 +158,9 @@ DeltaConverter.prototype.addItem = function(insert, attributes) {
       this.current.value += singleTag("img", {
         src: insert.image,
         width: attributes && attributes.width ? attributes.width : "auto",
-        height: attributes && attributes.height ? attributes.height : "auto"
+        height: attributes && attributes.height ? attributes.height : "auto",
+        class:
+          attributes && attributes.align ? `ql-align-${attributes.align}` : ""
       });
     } else if (insert.video) {
       this.current.value += wrapTag("iframe", "", {
@@ -150,7 +181,9 @@ DeltaConverter.prototype.convertPrevious = function() {
 
     if (
       this.current.attributes &&
-      (this.current.attributes["code-block"] || this.current.attributes["list"])
+      (this.current.attributes["code-block"] ||
+        this.current.attributes["list"] ||
+        this.current.attributes["blockquote"])
     ) {
       var blockValues = [];
       for (var i = 0; i < length - 1; i++) {
@@ -173,7 +206,9 @@ DeltaConverter.prototype.convertRemain = function() {
       results = "";
     if (
       this.current.attributes &&
-      (this.current.attributes["code-block"] || this.current.attributes["list"])
+      (this.current.attributes["code-block"] ||
+        this.current.attributes["list"] ||
+        this.current.attributes["blockquote"])
     ) {
       var blockValues = [];
       for (var i = 0; i < length; i++) {

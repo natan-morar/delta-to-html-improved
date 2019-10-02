@@ -255,6 +255,7 @@ DeltaConverter.prototype.toHtml = function() {
   }
   // replace empty paragraphs with '&nbsp;'
   this.results = replaceAll(this.results, "></p>", "><br/></p>");
+  this.results = replaceAll(this.results, "class=''", "");
 
   return this.results;
 };

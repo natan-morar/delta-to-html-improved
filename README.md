@@ -39,7 +39,7 @@ let html = deltaToHtml(delta)
 
 ### Changes:
 
-- Empty paragraphs (lines containing only `\n`) are now converted to `<p>&nbsp;</p>`
+- Empty paragraphs (lines containing only `\n`) are now converted to `<p><br/></p>`
 - `deep-equal` dependency changed to `fast-deep-equal`
 - grouped `blockquote`s together
 - link set to open in new tab

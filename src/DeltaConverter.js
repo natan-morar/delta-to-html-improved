@@ -31,6 +31,7 @@ var convert = function(value, attributes) {
       if (attributes["align"] == "center") qclass += "ql-align-center ";
       if (attributes["align"] == "left") qclass += "ql-align-left ";
       if (attributes["align"] == "right") qclass += "ql-align-right ";
+      if (attributes["align"] == "justify") qclass += "ql-align-justify ";
     }
     if (attributes["indent"]) {
       qclass += `ql-indent-${attributes["indent"]} `;

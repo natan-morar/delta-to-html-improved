@@ -30,7 +30,7 @@ let html = deltaToHtml(delta)
 ### Added support for:
 
 - fonts
-- align
+- align (left, right, center, justify)
 - strike
 - script
 - indent
@@ -49,3 +49,4 @@ let html = deltaToHtml(delta)
 
 - text `color`
 - text `backgroud`
+- formula

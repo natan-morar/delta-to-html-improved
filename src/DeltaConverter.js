@@ -45,7 +45,9 @@ var convert = function(value, attributes) {
         class: qclass
       });
     } else if (attributes["blockquote"]) {
-      return wrapTag("blockquote", value.join("\n").trim(), { class: qclass });
+      return wrapTag("blockquote", /* value.join("\n").trim() */ value, {
+        class: qclass
+      });
     } else if (attributes["list"]) {
       return wrapTag(
         attributes["list"] == "ordered" ? "ol" : "ul",
@@ -147,8 +149,8 @@ DeltaConverter.prototype.addItem = function(insert, attributes) {
         equal(this.current.attributes, attributes) &&
         attributes &&
         (attributes["code-block"] ||
-          attributes["list"] ||
-          attributes["blockquote"]) &&
+          attributes["list"]) /*  ||
+          attributes["blockquote"] */ &&
         insert == "\n"
       ) {
       } else {
@@ -187,8 +189,10 @@ DeltaConverter.prototype.convertPrevious = function() {
     if (
       this.current.attributes &&
       (this.current.attributes["code-block"] ||
-        this.current.attributes["list"] ||
-        this.current.attributes["blockquote"])
+        this.current.attributes[
+          "list"
+        ]) /* ||
+        this.current.attributes["blockquote"] */
     ) {
       var blockValues = [];
       for (var i = 0; i < length - 1; i++) {
@@ -212,8 +216,10 @@ DeltaConverter.prototype.convertRemain = function() {
     if (
       this.current.attributes &&
       (this.current.attributes["code-block"] ||
-        this.current.attributes["list"] ||
-        this.current.attributes["blockquote"])
+        this.current.attributes[
+          "list"
+        ]) /* ||
+        this.current.attributes["blockquote"] */
     ) {
       var blockValues = [];
       for (var i = 0; i < length; i++) {
